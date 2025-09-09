@@ -5,9 +5,6 @@
 The system is designed to **ingest knowledge sources** (PDFs, text, Markdown), **embed them with Gemini embeddings**, and **retrieve relevant context** during conversation to reduce hallucinations. A **FastAPI backend** powers the retrieval and response pipeline, while a **Streamlit frontend** provides a user-friendly chat interface.
 
 To ensure safety, TheraBot includes **crisis keyword detection** and automatically displays **regional helplines** when necessary, making it both helpful and responsible.
-
-Deployed via **Docker Compose**, the entire stack can be started with a single command, supporting portability and scalability.
-
 ---
 
 ### 🔑 Key Features
@@ -17,7 +14,6 @@ Deployed via **Docker Compose**, the entire stack can be started with a single c
 * **Safety Guardrails:** Crisis detection with disclaimers and helpline recommendations.
 * **FastAPI Backend:** Provides `/chat` and `/health` endpoints.
 * **Streamlit UI:** Simple, responsive chat interface with session memory.
-* **Dockerized Deployment:** One-command start with `docker compose`.
 * **Configurable:** Environment-based setup for keys, models, and paths.
 
 ---
@@ -26,7 +22,6 @@ Deployed via **Docker Compose**, the entire stack can be started with a single c
 
 * **Backend:** Python, FastAPI, LangChain, FAISS, Google Generative AI SDK
 * **Frontend:** Streamlit (chat interface)
-* **Infrastructure:** Docker, Docker Compose, dotenv
 * **Testing:** Pytest
 
 ---
