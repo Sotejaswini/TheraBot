@@ -1,3 +1,0 @@
-models:
-  llm: gemini-1.5-flash
-  embedding: text-embedding-004
