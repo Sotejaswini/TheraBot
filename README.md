@@ -24,7 +24,7 @@ It integrates **LangChain**, **FAISS**, and **Google Gemini models** to provide 
 
 ## 🛠 Tech Stack
 - **LLM & Embeddings**: Google Gemini (`gemini-1.5-flash`, `text-embedding-004`)  
-- **Vector Store**: FAISS  
+- **Vector Store**: FAISS ~ https://github.com/facebookresearch/faiss
 - **Frameworks**: LangChain, Streamlit  
 - **Others**: dotenv, PyPDFLoader  
 
