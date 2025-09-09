@@ -1,4 +1,5 @@
 import os
+import asyncio
 import streamlit as st
 from dotenv import load_dotenv
 from langchain_community.vectorstores import FAISS
@@ -7,10 +8,9 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGener
 # ================== Setup ==================
 st.set_page_config(page_title="TheraBot", page_icon="🌿")
 
-# Load .env for local runs
+# Load .env (for local) or secrets (for Streamlit Cloud)
 load_dotenv()
 
-# ✅ Safe secrets/env loader
 def get_secret(key: str, default=None):
     try:
         if key in st.secrets:
@@ -19,7 +19,7 @@ def get_secret(key: str, default=None):
         pass
     return os.getenv(key, default)
 
-# Environment variables
+# Env vars
 GEMINI_API_KEY = get_secret("GEMINI_API_KEY")
 FAISS_INDEX_PATH = get_secret("FAISS_INDEX_PATH", "data/faiss_index")
 LLM_MODEL = get_secret("LLM_MODEL", "gemini-1.5-flash")
@@ -41,6 +41,12 @@ def check_crisis(text: str):
 # ================== Load FAISS DB ==================
 @st.cache_resource
 def load_db():
+    # ✅ Ensure async loop exists (fixes gRPC issue on Streamlit Cloud)
+    try:
+        asyncio.get_running_loop()
+    except RuntimeError:
+        asyncio.set_event_loop(asyncio.new_event_loop())
+
     embeddings = GoogleGenerativeAIEmbeddings(
         model=EMBEDDING_MODEL,
         google_api_key=GEMINI_API_KEY
