@@ -1,4 +1,4 @@
-# 🌿 TheraBot
+# 🌿 TheraBot - Empathetic AI Assistant
 
 [![Made with LangChain](https://img.shields.io/badge/Made%20with-LangChain-blue)](https://www.langchain.com/)  
 [![Deployed on Streamlit](https://img.shields.io/badge/Deployed%20on-Streamlit-brightgreen)](https://sotejaswini-therabot.streamlit.app)  
