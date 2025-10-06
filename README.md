@@ -10,7 +10,7 @@ It integrates **LangChain**, **FAISS**, and **Google Gemini models** to provide 
 > ⚠️ **Disclaimer**  
 > TheraBot is **not a medical tool** and does not provide professional medical advice.  
 > For urgent needs, please contact a licensed professional or your regional helpline (e.g., **988** in the US).
-
+![Screenshot](https://github.com/Sotejaswini/TheraBot/blob/main/docs/work-6.png)
 ---
 
 ## 🔑 Key Features
