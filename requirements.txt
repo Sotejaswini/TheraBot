@@ -4,6 +4,8 @@ python-dotenv
 langchain
 langchain-community
 langchain-groq
+langchain-huggingface
+
 groq
 
 sentence-transformers
