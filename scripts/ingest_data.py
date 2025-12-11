@@ -1,13 +1,7 @@
 import os
-from dotenv import load_dotenv
 from langchain_community.document_loaders import PyPDFLoader, TextLoader, DirectoryLoader
 from langchain_community.vectorstores import FAISS
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
-
-load_dotenv()
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-if not GEMINI_API_KEY:
-    raise ValueError("❌ Missing GEMINI_API_KEY")
+from langchain_huggingface import HuggingFaceEmbeddings
 
 docs_path = "data/"
 
@@ -23,10 +17,8 @@ for loader in loaders:
 
 print(f"📄 Loaded {len(docs)} documents")
 
-embeddings = GoogleGenerativeAIEmbeddings(
-    model="models/text-embedding-004",
-    google_api_key=GEMINI_API_KEY
-)
+# SAME model as app.py
+embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
 db = FAISS.from_documents(docs, embeddings)
 db.save_local("data/faiss_index")
