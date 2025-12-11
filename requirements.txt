@@ -1,9 +1,9 @@
-streamlit
-python-dotenv
 langchain
-langchain-core
 langchain-community
-langchain-groq
 langchain-huggingface
 faiss-cpu
-pypdf
+sentence-transformers
+torch
+transformers
+python-dotenv
+streamlit
