@@ -7,3 +7,6 @@ torch
 transformers
 python-dotenv
 streamlit
+langchain-core
+langchain-groq
+pypdf
