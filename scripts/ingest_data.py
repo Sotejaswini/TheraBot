@@ -1,7 +1,10 @@
 import os
+from dotenv import load_dotenv
 from langchain_community.document_loaders import PyPDFLoader, TextLoader, DirectoryLoader
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
+
+load_dotenv()
 
 docs_path = "data/"
 
@@ -17,10 +20,12 @@ for loader in loaders:
 
 print(f"📄 Loaded {len(docs)} documents")
 
-# SAME model as app.py
-embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+# SAME model you’ll use in app.py
+embeddings = HuggingFaceEmbeddings(
+    model_name="sentence-transformers/all-MiniLM-L6-v2"
+)
 
 db = FAISS.from_documents(docs, embeddings)
 db.save_local("data/faiss_index")
 
-print("✅ Ingestion complete. FAISS index saved to data/faiss_index")
+print("✅ FAISS index saved to data/faiss_index")
