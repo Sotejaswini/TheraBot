@@ -88,3 +88,4 @@ if user_input:
 
 for role, msg in st.session_state.history:
     st.chat_message(role).write(msg)
+
