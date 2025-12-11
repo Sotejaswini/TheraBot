@@ -1,8 +1,12 @@
 import os
+import asyncio
+import streamlit as st
 from dotenv import load_dotenv
-from langchain_community.document_loaders import PyPDFLoader, TextLoader, DirectoryLoader
+
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_groq import ChatGroq
+from langchain_core.messages import HumanMessage  
 
 load_dotenv()
 
@@ -29,3 +33,4 @@ db = FAISS.from_documents(docs, embeddings)
 db.save_local("data/faiss_index")
 
 print("✅ FAISS index saved to data/faiss_index")
+
