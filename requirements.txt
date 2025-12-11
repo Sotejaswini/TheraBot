@@ -4,12 +4,12 @@ python-dotenv==1.0.0
 langchain==0.2.12
 langchain-core==0.2.4
 langchain-community==0.2.4
-langchain-google-genai==1.0.3
-
+langchain_google_genai
 google-generativeai==0.7.2
 
 faiss-cpu==1.7.4
 
 numpy==1.26.4
 tqdm==4.66.4
+
 
