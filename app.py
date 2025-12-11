@@ -3,8 +3,9 @@ import asyncio
 import streamlit as st
 from dotenv import load_dotenv
 from langchain_community.vectorstores import FAISS
-from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
+from langchain_groq import ChatGroq
 from langchain_core.messages import HumanMessage
+from langchain_community.embeddings import HuggingFaceEmbeddings
 
 # ================== Setup ==================
 st.set_page_config(page_title="TheraBot", page_icon="🌿")
@@ -19,14 +20,12 @@ def get_secret(key: str, default=None):
         pass
     return os.getenv(key, default)
 
-# ===== Environment Variables =====
-GEMINI_API_KEY = get_secret("GEMINI_API_KEY")
+# ===== Env Vars =====
+GROQ_API_KEY = get_secret("GROQ_API_KEY")
 FAISS_INDEX_PATH = get_secret("FAISS_INDEX_PATH", "data/faiss_index")
-LLM_MODEL = get_secret("LLM_MODEL", "gemini-2.0-flash")
-EMBEDDING_MODEL = get_secret("EMBEDDING_MODEL", "models/text-embedding-004")
 
-if not GEMINI_API_KEY:
-    st.error("❌ GEMINI_API_KEY missing. Add it to `.env` or Streamlit Secrets.")
+if not GROQ_API_KEY:
+    st.error("❌ GROQ_API_KEY missing. Add it to Streamlit Secrets.")
     st.stop()
 
 # Crisis keywords
@@ -35,10 +34,10 @@ CRISIS_KEYWORDS = ["suicide", "kill myself", "end my life", "hopeless", "depress
 def check_crisis(text):
     for word in CRISIS_KEYWORDS:
         if word in text.lower():
-            return True, "⚠️ If you are in crisis, please contact your regional helpline."
+            return True, "⚠️ If you are in crisis, consider reaching out to a local helpline."
     return False, None
 
-# ============ Load Vector DB =============
+# ============== Load Vector DB ==============
 @st.cache_resource
 def load_db():
     try:
@@ -46,10 +45,8 @@ def load_db():
     except RuntimeError:
         asyncio.set_event_loop(asyncio.new_event_loop())
 
-    embeddings = GoogleGenerativeAIEmbeddings(
-        model=EMBEDDING_MODEL,
-        google_api_key=GEMINI_API_KEY
-    )
+    # Free & local embedding model
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
     return FAISS.load_local(
         FAISS_INDEX_PATH,
@@ -59,28 +56,34 @@ def load_db():
 
 db = load_db()
 
-# ============ LLM =============
-llm = ChatGoogleGenerativeAI(
-    model=LLM_MODEL,
-    google_api_key=GEMINI_API_KEY,
+# ============== Groq LLM ==================
+llm = ChatGroq(
+    model="llama3-70b-8192",
+    groq_api_key=GROQ_API_KEY,
     temperature=0.7
 )
 
-# ============ RAG Function =============
+# ============== RAG Function ==================
 def get_rag_response(query):
     docs = db.similarity_search(query, k=3)
-    context = "\n".join([d.page_content for d in docs]) if docs else "No relevant documents found."
+    context = "\n".join([d.page_content for d in docs]) if docs else "No documents found."
 
-    prompt = f"Context:\n{context}\n\nUser: {query}\nTheraBot:"
+    prompt = f"""
+You are TheraBot, an empathetic mental wellness assistant.
 
-    response = llm.invoke([
-        HumanMessage(content=prompt)
-    ])
+Context from knowledge base:
+{context}
 
+User: {query}
+
+Respond warmly, helpfully, and safely.
+"""
+
+    response = llm.invoke([HumanMessage(content=prompt)])
     return response.content
 
-# ============ Streamlit UI =============
-st.title("🌿 TheraBot - Empathetic AI Assistant")
+# ============== UI ==================
+st.title("🌿 TheraBot (Groq Powered)")
 
 if "history" not in st.session_state:
     st.session_state.history = []
