@@ -1,9 +1,13 @@
 streamlit
 python-dotenv
+
+langchain
 langchain-community
-langchain-google-genai
-faiss-cpu
 langchain-groq
 groq
-langchain
 
+sentence-transformers
+transformers
+huggingface-hub
+
+faiss-cpu
